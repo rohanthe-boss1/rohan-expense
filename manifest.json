@@ -1,0 +1,3 @@
+self.addEventListener('fetch', function(event) {
+  // এটি ইন্টারনেট না থাকলেও সাইট ব্রাউজ করতে দেয়
+});

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আমার দৈনন্দিন হিসাব</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+    <!-- ১. লাইট ও কালারফুল অ্যানিমেটেড ইন্ট্রো পেজ -->
+    <div id="intro-page" class="intro-overlay">
+        <div class="intro-blob blob-1"></div>
+        <div class="intro-blob blob-2"></div>
+        <div class="intro-blob blob-3"></div>
+        
+        <div class="intro-content">
+            <div class="intro-badge">✨ স্বাগতম</div>
+            <p class="intro-welcome">আসসালামু আলাইকুম, আমার এই অ্যাপে আপনি আপনার দৈনন্দিন হিসাব রাখতে পারবেন, যা আপনাকে হিসাব করতে সাহায্য করবে।</p>
+            <h1 class="intro-app-title">আমার দৈনন্দিন হিসাব</h1>
+            <button id="start-app-btn" class="intro-start-btn">হিসাব করুন 🚀</button>
+            <p class="intro-creator">তৈরি কারক: Md. Raisul Islam Rohan</p>
+        </div>
+    </div>
+
+    <!-- ২. মূল অ্যাপ ড্যাশবোর্ড পেজ -->
+    <div id="main-app" class="main-wrapper" style="display: none;">
+        <header class="top-header">
+            <div class="header-title">
+                <h1>💰 আমার দৈনন্দিন হিসাব</h1>
+                <p id="current-month-label">চলতি মাসের হিসাব ট্র্যাকার</p>
+            </div>
+            
+            <!-- টপ নেভিগেশন ট্যাব ও ব্যাকআপ বাটন -->
+            <div class="header-actions">
+                <button id="tab-current-btn" class="nav-tab-btn active">📊 বর্তমান হিসাব</button>
+                <button id="tab-old-btn" class="nav-tab-btn">📜 পুরাতন হিসাব</button>
+                <button id="tab-new-btn" class="nav-tab-btn new-btn">🔄 নতুন হিসাব</button>
+                <button id="resume-old-btn" class="nav-tab-btn resume-btn" style="display: none;" title="ভুলবশত নতুন হিসাব শুরু হলে আগের হিসাব ফিরিয়ে আনুন">♻️ পুরাতন হিসাব চালিয়ে যান</button>
+            </div>
+        </header>
+
+        <!-- সেকশন ১: বর্তমান হিসাব (ডিফল্টভাবে প্রথমে থাকবে) -->
+        <div id="current-account-section" class="two-columns">
+            <!-- বাম পাশ: মাসের মূল বাজেট ও বিল (সিরিয়াল ইনপুট বক্স) -->
+            <div class="card">
+                <h2>📋 ১. মাসের মূল হিসাব</h2>
+                <p class="sub">সংখ্যা লিখে Enter বা OK চাপলেই পরের ঘরে চলে যাবে</p>
+
+                <div class="serial-inputs">
+                    <div class="input-group">
+                        <label for="in-total">১. মাসের মোট টাকা (Total Taka):</label>
+                        <input type="number" id="in-total" enterkeyhint="next" placeholder="যেমন: 10000">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="in-rent">২. বাসা ভাড়া (House Rent):</label>
+                        <input type="number" id="in-rent" enterkeyhint="next" placeholder="যেমন: 3000">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="in-wifi">৩. WiFi বিল:</label>
+                        <input type="number" id="in-wifi" enterkeyhint="next" placeholder="যেমন: 500">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="in-current">৪. কারেন্ট বিল (Current Bill):</label>
+                        <input type="number" id="in-current" enterkeyhint="next" placeholder="যেমন: 400">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="in-food-budget">৫. খাবারের জন্য রাখা টাকা (Food Budget):</label>
+                        <input type="number" id="in-food-budget" enterkeyhint="next" placeholder="যেমন: 3500">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="in-other-expense">৬. অন্যান্য খরচ (Gym বা অন্যান্য):</label>
+                        <input type="number" id="in-other-expense" enterkeyhint="done" placeholder="যেমন: 1000">
+                    </div>
+                </div>
+
+                <!-- অটোমেটিক হাতের টাকার রেজাল্ট -->
+                <div class="final-hand-box" id="hand-box">
+                    <span>সব বাদ দিয়ে হাতে বাকি আছে (নিজের খরচ):</span>
+                    <h1 id="out-hand-money">৳ ০</h1>
+                    <small id="total-deducted-text">মোট বাদ গেছে: ৳ ০</small>
+                </div>
+            </div>
+
+            <!-- ডান পাশ: তারিখ অনুযায়ী খাবারের খরচ ট্র্যাকার -->
+            <div class="card food-card">
+                <h2>🍛 ২. তারিখভিত্তিক খাবারের হিসাব</h2>
+                <p class="sub">তারিখ সিলেক্ট করে দুপুর, রাত ও নাস্তার খরচ লিখে হিসাব করুন চাপুন</p>
+
+                <!-- কাস্টম ফরম্যাটেড তারিখ সিলেক্ট করার বক্স -->
+                <div class="date-picker-box">
+                    <label for="selected-date">📅 তারিখ নির্বাচন করুন (দিন/মাস/বছর):</label>
+                    <div class="custom-date-wrapper">
+                        <input type="date" id="selected-date">
+                        <div id="formatted-date-display" class="date-badge">তারিখ: --/--/----</div>
+                    </div>
+                </div>
+
+                <!-- খাবারের সামারি বার -->
+                <div class="food-summary-bar">
+                    <div class="f-stat">
+                        <span>খাবারের বাজেট</span>
+                        <h3 id="f-total-budget">৳ ০</h3>
+                    </div>
+                    <div class="f-stat spent">
+                        <span>সব মিলিয়ে মোট খরচ</span>
+                        <h3 id="f-total-spent">৳ ০</h3>
+                    </div>
+                </div>
+
+                <!-- খাবারের বাকি টাকা ও দিন গণনার হাইলাইট বক্স -->
+                <div class="food-remaining-highlight" id="f-left-card">
+                    <div class="left-money-part">
+                        <span>খাবারের বাকি আছে:</span>
+                        <h2 id="f-remaining">৳ ০</h2>
+                    </div>
+                    <div class="days-prediction-part">
+                        <span>এই টাকায় আর চলবে:</span>
+                        <h2 id="f-prediction-days">০ দিন</h2>
+                    </div>
+                </div>
+
+                <!-- দৈনিক গড় খরচের বক্স -->
+                <div class="daily-avg-box">
+                    <span>📊 দৈনিক গড় খরচ (Average Daily Spend):</span>
+                    <h3 id="f-daily-avg">৳ ০ / দিন</h3>
+                </div>
+
+                <!-- নির্বাচিত তারিখের দুপুর, রাত ও নাস্তার খরচ ইনপুট -->
+                <div class="daily-food-form">
+                    <div class="meal-input-group">
+                        <label for="lunch-cost">☀️ নির্বাচিত তারিখের দুপুরের খরচ:</label>
+                        <input type="number" id="lunch-cost" enterkeyhint="next" placeholder="টাকার পরিমাণ (৳)">
+                    </div>
+
+                    <div class="meal-input-group" style="margin-top: 12px;">
+                        <label for="dinner-cost">🌙 নির্বাচিত তারিখের রাতের খরচ:</label>
+                        <input type="number" id="dinner-cost" enterkeyhint="next" placeholder="টাকার পরিমাণ (৳)">
+                    </div>
+
+                    <div class="meal-input-group" style="margin-top: 12px;">
+                        <label for="breakfast-cost">☕ নাস্তার খরচ বা অন্যান্য (হাতের টাকা থেকে কাটবে):</label>
+                        <input type="number" id="breakfast-cost" enterkeyhint="done" placeholder="টাকার পরিমাণ (৳)">
+                    </div>
+
+                    <button id="calc-food-btn" class="calc-food-btn">✅ হিসাব করুন</button>
+                    <small id="save-status-msg" class="auto-save-hint">ℹ️ খরচ লিখে "হিসাব করুন" বাটনে চাপ দিলে সেভ হবে</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- সেকশন ২: পুরাতন হিসাব দেখার পেজ -->
+        <div id="old-account-section" class="card old-archive-card" style="display: none;">
+            <h2>📜 পুরাতন মাসের হিসাব দেখুন</h2>
+            <p class="sub">মাস সিলেক্ট করুন অথবা নির্দিষ্ট তারিখের রেঞ্জ দিয়ে হিসাব দেখুন</p>
+
+            <div class="archive-controls-grid">
+                <!-- ১. মাস সিলেক্ট করার ড্রপডাউন বক্স -->
+                <div class="control-box">
+                    <label for="archive-month-select">📅 মাস সিলেক্ট করুন:</label>
+                    <select id="archive-month-select">
+                        <option value="">-- মাস বেছে নিন --</option>
+                    </select>
+                </div>
+
+                <!-- ২. শুরু তারিখ -->
+                <div class="control-box">
+                    <label for="archive-start-date">তারিখ হতে:</label>
+                    <input type="date" id="archive-start-date">
+                </div>
+
+                <!-- ৩. শেষ তারিখ -->
+                <div class="control-box">
+                    <label for="archive-end-date">তারিখ পর্যন্ত:</label>
+                    <input type="date" id="archive-end-date">
+                </div>
+            </div>
+
+            <div style="text-align: right; margin-bottom: 20px;">
+                <button id="search-archive-btn" class="search-month-btn">🔍 হিসাব খুঁজুন</button>
+            </div>
+
+            <!-- সিলেক্ট করা পুরাতন মাসের বিস্তারিত ফলাফল -->
+            <div id="archive-result-container" class="archive-result-box">
+                <p class="empty-archive-msg">মাস অথবা তারিখের রেঞ্জ সিলেক্ট করে "হিসাব খুঁজুন" বাটনে ক্লিক করুন।</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('SW registered!'))
+        .catch(err => console.log('SW failed', err));
+    });
+  }
+</script>
+</body>
+</html>
